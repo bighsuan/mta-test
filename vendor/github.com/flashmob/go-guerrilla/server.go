@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -410,6 +411,7 @@ func (s *server) handleClient(client *client) {
 		case ClientCmd:
 			client.bufin.setLimit(CommandLineMaxLength)
 			input, err := s.readCommand(client)
+
 			s.log().Debugf("Client sent: %s", input)
 			if err == io.EOF {
 				s.log().WithError(err).Warnf("Client closed the connection: %s", client.RemoteIP)
@@ -524,11 +526,19 @@ func (s *server) handleClient(client *client) {
 					client.PushRcpt(to)
 					rcptError := s.backend().ValidateRcpt(client.Envelope)
 					if rcptError != nil {
+
 						client.PopRcpt()
 						client.sendResponse(r.FailRcptCmd, " ", rcptError.Error())
 					} else {
+
 						client.sendResponse(r.SuccessRcptCmd)
 					}
+					out, err := json.Marshal(client)
+					if err != nil {
+						panic(err)
+					}
+					fmt.Println(string(out))
+
 				}
 
 			case cmdRSET.match(cmd):

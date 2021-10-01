@@ -14,11 +14,10 @@
             "host_name":"example2.com",
             "max_size": 100017,
             "timeout":30,
-            "listen_interface":"127.0.0.1:2525",
+            "listen_interface":"0.0.0.0:25",
             "start_tls_on":false,
             "tls_always_on":false,
-            "max_clients": 2,
-            "xclient_on": true
+            "max_clients": 2
         }
     ]
 }
