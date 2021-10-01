@@ -1,0 +1,23 @@
+{
+    "log_file" : "../logs/server1",
+    "log_level" : "debug",
+    "allowed_hosts": ["."],
+    "backend_config" :
+        {
+            "log_received_mails" : true,
+            "save_process": "HeadersParser|Header|Hasher|Debugger",
+            "save_workers_size":  3
+        },
+    "servers" : [
+        {
+            "is_enabled" : true,
+            "host_name":"example1.com",
+            "max_size": 100017,
+            "timeout":30,
+            "listen_interface":"127.0.0.1:2525",
+            "start_tls_on":false,
+            "tls_always_on":false,
+            "max_clients": 2
+        }
+    ]
+}

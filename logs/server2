@@ -1,0 +1,8 @@
+time="2021-10-01T09:56:41Z" level=debug msg="[127.0.0.1:2525] Waiting for a new client. Next Client ID: 3"
+time="2021-10-01T09:56:41Z" level=info msg="Handle client [127.0.0.1], id: 2"
+time="2021-10-01T09:56:41Z" level=debug msg="Writing response to client: \n220 example2.com SMTP Guerrilla(unknown) #2 (1) 2021-10-01T09:56:41Z\r\n"
+time="2021-10-01T09:56:51Z" level=debug msg="Client sent: helo example1.com"
+time="2021-10-01T09:56:51Z" level=warning msg="cmd: HELO EXAMPLE1.CO" error="<nil>"
+time="2021-10-01T09:56:52Z" level=debug msg="Writing response to client: \n250 example2.com Hello\r\n"
+time="2021-10-01T09:57:22Z" level=debug msg="Client sent: "
+time="2021-10-01T09:57:22Z" level=warning msg="Timeout: 127.0.0.1" error="read tcp 127.0.0.1:2525->127.0.0.1:52336: i/o timeout"

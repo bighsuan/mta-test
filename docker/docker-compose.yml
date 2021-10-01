@@ -1,0 +1,30 @@
+version: '3'
+services:
+  server1:
+    container_name: server1
+    image: golang:1.17.1
+    volumes:
+      - ${PWD}:/mta-test
+    environment:
+      - SMTP_CONF=server1.conf.json
+    links:
+      - server2
+    ports:
+      - 8081:8081
+    stdin_open: true # -i
+    tty: true        # -t
+
+  server2:
+    container_name: server2
+    image: golang:1.17.1
+    volumes:
+      - ${PWD}:/mta-test
+    environment:
+      - SMTP_CONF=server2.conf.json
+    # links:
+    #   - server1
+    ports:
+      - 8083:8081
+
+    stdin_open: true # -i
+    tty: true        # -t

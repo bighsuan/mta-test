@@ -1,0 +1,20 @@
+# github.com/asaskevich/EventBus v0.0.0-20200907212545-49d423059eef
+## explicit
+github.com/asaskevich/EventBus
+# github.com/flashmob/go-guerrilla v1.6.1
+## explicit
+github.com/flashmob/go-guerrilla
+github.com/flashmob/go-guerrilla/backends
+github.com/flashmob/go-guerrilla/log
+github.com/flashmob/go-guerrilla/mail
+github.com/flashmob/go-guerrilla/mail/rfc5321
+github.com/flashmob/go-guerrilla/response
+# github.com/go-sql-driver/mysql v1.6.0
+## explicit; go 1.10
+# github.com/sirupsen/logrus v1.8.1
+## explicit; go 1.13
+github.com/sirupsen/logrus
+# golang.org/x/sys v0.0.0-20191026070338-33540a1f6037
+## explicit; go 1.12
+golang.org/x/sys/unix
+golang.org/x/sys/windows
