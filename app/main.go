@@ -28,9 +28,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func runServer() (d guerrilla.Daemon) {
-
 	d = guerrilla.Daemon{}
-	_, err := d.LoadConfig("../configs/" + os.Getenv("SMTP_CONF"))
+	_, err := d.LoadConfig("configs/" + os.Getenv("SMTP_CONF"))
 	if err != nil {
 		fmt.Println("ReadConfig error", err)
 
@@ -46,7 +45,7 @@ func runServer() (d guerrilla.Daemon) {
 
 func sendEmail(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
-	server := "127.0.0.1:2525"
+	server := "127.0.0.1:25"
 	from := q["from"][0]
 	to := q["to"][0]
 
@@ -73,15 +72,17 @@ func sendEmail(w http.ResponseWriter, r *http.Request) {
 
 	in.ReadString('\n')
 
+	fmt.Fprint(conn, "From: "+from+"\r\n")
+	fmt.Fprint(conn, "To: "+to+"\r\n")
 	fmt.Fprint(conn, "Subject: Test subject\r\n")
+	in.ReadString('\n')
 	fmt.Fprint(conn, "A an email body\r\n")
 	fmt.Fprint(conn, ".\r\n")
 
 	in.ReadString('\n')
 
-	// fmt.Fprint(conn, "QUIT\r\n")
-	// in.ReadString('\n')
-
+	fmt.Fprint(conn, "QUIT\r\n")
+	in.ReadString('\n')
 }
 
 func shutdown(w http.ResponseWriter, r *http.Request) {

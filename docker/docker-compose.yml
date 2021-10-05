@@ -3,6 +3,9 @@ services:
   server1:
     container_name: server1
     image: golang:1.17.1
+    working_dir: /mta-test
+    cap_add:
+      - ALL
     volumes:
       - ${PWD}:/mta-test
     environment:
@@ -17,12 +20,13 @@ services:
   server2:
     container_name: server2
     image: golang:1.17.1
+    working_dir: /mta-test
+    cap_add:
+      - ALL
     volumes:
       - ${PWD}:/mta-test
     environment:
       - SMTP_CONF=server2.conf.json
-    # links:
-    #   - server1
     ports:
       - 8083:8081
 

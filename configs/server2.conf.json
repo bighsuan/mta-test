@@ -1,5 +1,4 @@
 {
-    "log_file" : "../logs/server2",
     "log_level" : "debug",
     "allowed_hosts": ["."],
     "backend_config" :

@@ -5,7 +5,6 @@ import (
 	"crypto/rand"
 	"crypto/tls"
 	"crypto/x509"
-	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -438,7 +437,6 @@ func (s *server) handleClient(client *client) {
 				cmdLen = CommandVerbMaxLength
 			}
 			cmd := bytes.ToUpper(input[:cmdLen])
-			s.log().WithError(err).Warnf("cmd: %s", cmd)
 			switch {
 			case cmdHELO.match(cmd):
 				if h, err := client.parser.Helo(input[4:]); err == nil {
@@ -533,12 +531,6 @@ func (s *server) handleClient(client *client) {
 
 						client.sendResponse(r.SuccessRcptCmd)
 					}
-					out, err := json.Marshal(client)
-					if err != nil {
-						panic(err)
-					}
-					fmt.Println(string(out))
-
 				}
 
 			case cmdRSET.match(cmd):
