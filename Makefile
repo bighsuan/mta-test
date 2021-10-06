@@ -1,28 +1,21 @@
 
 # RUN = docker exec -it server1
+FROM-MTA = sender@mta-send
+FROM-SWAKS = sender@swaks-send
+TO = user@mta-receive
+
 
 help:
 	@echo "Please use \`make <ROOT>' where <ROOT> is one of"
-	@echo "  guerrillad   to build the main binary for current platform"
+	@echo "  build           to build three container, two run MTA server on localhost:2525, and one run nothing but install Swaks."
+	@echo "  sendfrommta     to send mail from one of MTA server to another"
+	@echo "  sendfromswaks   to send mail by Swaks, from the container which without MTA server"
 
-rundocker:
+build:
 	docker-compose -f ./docker/docker-compose.yml up -d
 
-runserver1:
-	docker exec -it server1 go run app/main.go
+sendfrommta:
+	docker exec -it mta-send curl "localhost:8081/sendemail?from=$(FROM-MTA)&to=$(TO)"
 
-runserver2:
-	docker exec -it server2 go run app/main.go
-
-enters1:
-	docker exec -it server1 bash
-	# apt-get update
-	# apt-get install telnet
-
-
-enters2:
-	docker exec -it server2 bash
-
-
-sendmail:
-	telnet 0.0.0.0:2525
+sendfromswaks:
+	docker exec -it swaks-send swaks --to $(TO) --port 2525

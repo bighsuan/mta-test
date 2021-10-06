@@ -570,6 +570,8 @@ func (s *server) handleClient(client *client) {
 			}
 
 		case ClientData:
+			input, err := s.readCommand(client)
+			s.log().Debugf("Client sent: %s", input)
 
 			// intentionally placed the limit 1MB above so that reading does not return with an error
 			// if the client goes a little over. Anything above will err

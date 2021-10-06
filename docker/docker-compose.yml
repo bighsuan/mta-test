@@ -1,34 +1,32 @@
 version: '3'
 services:
-  server1:
-    container_name: server1
+  mta-receive:
+    container_name: mta-receive
     image: golang:1.17.1
     working_dir: /mta-test
-    cap_add:
-      - ALL
     volumes:
       - ${PWD}:/mta-test
     environment:
-      - SMTP_CONF=server1.conf.json
+      - SMTP_CONF=mta-receive.conf.json
     links:
-      - server2
-    ports:
-      - 8081:8081
-    stdin_open: true # -i
-    tty: true        # -t
+      - mta-send
+      - swaks-send
+    command: sh -c "go run app/main.go"
 
-  server2:
-    container_name: server2
+  mta-send:
+    container_name: mta-send
     image: golang:1.17.1
     working_dir: /mta-test
-    cap_add:
-      - ALL
     volumes:
       - ${PWD}:/mta-test
     environment:
-      - SMTP_CONF=server2.conf.json
-    ports:
-      - 8083:8081
+      - SMTP_CONF=mta-send.conf.json
+    command: sh -c "go run app/main.go"
 
+  swaks-send:
+    container_name: swaks-send
+    image: golang:1.17.1
+    command: sh -c "apt-get update && apt-get install swaks -y && bash"
     stdin_open: true # -i
     tty: true        # -t
+

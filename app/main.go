@@ -13,21 +13,14 @@ import (
 var daemon guerrilla.Daemon
 
 func main() {
-	daemon = runServer()
+	daemon = runMtaServer()
 
-	http.HandleFunc("/", handler)
+	// to send mail from mta server in localhost
 	http.HandleFunc("/sendemail", sendEmail)
-	http.HandleFunc("/shutdown", shutdown)
 	http.ListenAndServe(":8081", nil)
-
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Println("hello!")
-}
-
-func runServer() (d guerrilla.Daemon) {
+func runMtaServer() (d guerrilla.Daemon) {
 	d = guerrilla.Daemon{}
 	_, err := d.LoadConfig("configs/" + os.Getenv("SMTP_CONF"))
 	if err != nil {
@@ -45,7 +38,8 @@ func runServer() (d guerrilla.Daemon) {
 
 func sendEmail(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
-	server := "127.0.0.1:25"
+	server := "127.0.0.1:2525"
+
 	from := q["from"][0]
 	to := q["to"][0]
 
@@ -55,36 +49,23 @@ func sendEmail(w http.ResponseWriter, r *http.Request) {
 	}
 	in := bufio.NewReader(conn)
 
+	fmt.Fprintln(conn, "MAIL FROM:<"+from+">")
 	in.ReadString('\n')
 
-	fmt.Fprint(conn, "HELO example.com\r\n")
+	fmt.Fprintln(conn, "RCPT TO:<"+to+">")
 	in.ReadString('\n')
 
-	fmt.Fprint(conn, "MAIL FROM:<"+from+">\r\n")
-
+	fmt.Fprintln(conn, "DATA")
 	in.ReadString('\n')
 
-	fmt.Fprint(conn, "RCPT TO:<"+to+">\r\n")
-
-	in.ReadString('\n')
-
-	fmt.Fprint(conn, "DATA\r\n")
-
-	in.ReadString('\n')
-
-	fmt.Fprint(conn, "From: "+from+"\r\n")
-	fmt.Fprint(conn, "To: "+to+"\r\n")
-	fmt.Fprint(conn, "Subject: Test subject\r\n")
-	in.ReadString('\n')
-	fmt.Fprint(conn, "A an email body\r\n")
-	fmt.Fprint(conn, ".\r\n")
-
+	fmt.Fprintln(conn, "From: "+from)
+	fmt.Fprintln(conn, "To: "+to)
+	fmt.Fprintln(conn, "Subject: Test subject")
+	fmt.Fprintln(conn, "")
+	fmt.Fprintln(conn, "An email body")
+	fmt.Fprintln(conn, ".")
 	in.ReadString('\n')
 
 	fmt.Fprint(conn, "QUIT\r\n")
 	in.ReadString('\n')
-}
-
-func shutdown(w http.ResponseWriter, r *http.Request) {
-	daemon.Shutdown()
 }

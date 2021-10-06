@@ -1,6 +1,7 @@
 {
+    "log_file" :"logs/mta-send",
     "log_level" : "debug",
-    "allowed_hosts": ["."],
+    "allowed_hosts": ["mta-receive","mta-send","swaks-send"],
     "backend_config" :
         {
             "log_received_mails" : true,
@@ -10,13 +11,7 @@
     "servers" : [
         {
             "is_enabled" : true,
-            "host_name":"example2.com",
-            "max_size": 100017,
-            "timeout":30,
-            "listen_interface":"0.0.0.0:25",
-            "start_tls_on":false,
-            "tls_always_on":false,
-            "max_clients": 2
+            "listen_interface":"0.0.0.0:2525"
         }
     ]
 }
